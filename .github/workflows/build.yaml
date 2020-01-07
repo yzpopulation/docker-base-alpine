@@ -89,12 +89,13 @@ jobs:
     - name: Create day manifest
       if: github.event.issue.pull_request != 'false'
       run: |
-        docker manifest create ${DOCKER_USER}/${DOCKER_IMAGE}:$(date --utc +%Y-%m-%d_%H.%M) \
+        export CURRENT_TIME=$(date --utc +%Y-%m-%d_%H.%M)
+        docker manifest create ${DOCKER_USER}/${DOCKER_IMAGE}:${CURRENT_TIME} \
             ${REPO}:${DOCKER_TAG}-${PLATFORM_1} \
             ${REPO}:${DOCKER_TAG}-${PLATFORM_2} \
             ${REPO}:${DOCKER_TAG}-${PLATFORM_3}
-        docker manifest push ${REPO}:$(date --utc +%Y-%m-%d_%H.%M)
-        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_1} --arch ${PLATFORM_1}
-        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
-        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
-        docker manifest push ${REPO}:$(date --utc +%Y-%m-%d_%H.%M)
+        docker manifest push ${REPO}:${CURRENT_TIME}
+        docker manifest annotate ${REPO}:${CURRENT_TIME} ${REPO}:${DOCKER_TAG}-${PLATFORM_1} --arch ${PLATFORM_1}
+        docker manifest annotate ${REPO}:${CURRENT_TIME} ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
+        docker manifest annotate ${REPO}:${CURRENT_TIME} ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
+        docker manifest push ${REPO}:${CURRENT_TIME}
