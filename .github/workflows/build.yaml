@@ -11,13 +11,13 @@ jobs:
       BUILDKIT_HOST: tcp://0.0.0.0:1234
       DOCKER_CLI_EXPERIMENTAL: enabled
       DOCKER_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      DOCKER_IMAGE: playground
+      DOCKER_IMAGE: base-alpine
       DOCKER_TAG: latest
-      DOCKER_USER: si0972
+      DOCKER_USER: roxedus
       PLATFORM_1: amd64
       PLATFORM_2: arm
       PLATFORM_3: arm64
-      REPO: si0972/playground
+      REPO: roxedus/base-alpine
       
     steps:
     - uses: actions/checkout@v1
@@ -70,10 +70,10 @@ jobs:
     - name: Publish images
       if: github.event.issue.pull_request != 'false'
       run: |
-        docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_1}
+        docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_1} 
         docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_2}
         docker push ${REPO}:${DOCKER_TAG}-${PLATFORM_3}
-    - name: Create manifest
+    - name: Create tag manifest
       if: github.event.issue.pull_request != 'false'
       run: |
         docker manifest create ${DOCKER_USER}/${DOCKER_IMAGE}:${DOCKER_TAG} \
@@ -85,3 +85,16 @@ jobs:
         docker manifest annotate ${REPO}:${DOCKER_TAG} ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
         docker manifest annotate ${REPO}:${DOCKER_TAG} ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
         docker manifest push ${REPO}:${DOCKER_TAG}
+
+    - name: Create day manifest
+      if: github.event.issue.pull_request != 'false'
+      run: |
+        docker manifest create ${DOCKER_USER}/${DOCKER_IMAGE}:$(date --utc +%Y-%m-%d_%H.%M) \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_1} \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_2} \
+            ${REPO}:${DOCKER_TAG}-${PLATFORM_3}
+        docker manifest push ${REPO}:$(date --utc +%Y-%m-%d_%H.%M)
+        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_1} --arch ${PLATFORM_1}
+        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
+        docker manifest annotate ${REPO}:$(date --utc +%Y-%m-%d_%H.%M) ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
+        docker manifest push ${REPO}:$(date --utc +%Y-%m-%d_%H.%M)
