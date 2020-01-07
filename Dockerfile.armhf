@@ -1,7 +1,7 @@
 ARG BASE_IMAGE
 FROM ${BASE_IMAGE:-library/alpine:3.11}
 
-ENV S6_REL=1.22.1.0 S6_ARCH=armv7
+ENV S6_REL=1.22.1.0 S6_ARCH=armhf
 
 LABEL base.maintainer=Roxedus
 LABEL base.s6.rel=${S6_REL} base.s6.arch=S6_ARCH
