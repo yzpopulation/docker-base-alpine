@@ -99,3 +99,11 @@ jobs:
         docker manifest annotate ${REPO}:${CURRENT_TIME} ${REPO}:${DOCKER_TAG}-${PLATFORM_2} --arch ${PLATFORM_2}
         docker manifest annotate ${REPO}:${CURRENT_TIME} ${REPO}:${DOCKER_TAG}-${PLATFORM_3} --arch ${PLATFORM_3}
         docker manifest push ${REPO}:${CURRENT_TIME}
+
+    - name: Docker Hub README & description sync
+      if: github.event.issue.pull_request != 'false'
+      uses: meeDamian/sync-readme@v1.0.5
+      with:
+        user: ${DOCKER_USER}
+        pass: ${{ secrets.DOCKER_HUB_PASSWORD }}
+        slug: ${REPO}
