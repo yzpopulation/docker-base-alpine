@@ -8,7 +8,7 @@ on:
     paths-ignore:
       - 'README.md'
   schedule:
-      - '0 20 * * 5'
+      - cron: '0 20 * * 5'
 
 jobs:
   build:
