@@ -12,5 +12,5 @@ User gid:    $(id -g rox)
 -------------------------------------
 "
 
-chown rox:rox /app
-chown rox:rox /config
+chown -r rox:rox /app
+chown -r rox:rox /config
