@@ -6,6 +6,10 @@ LABEL maintainer=Roxedus
 LABEL dotnet_version=${DOTNET_VER} dotnet_arch=${DOTNET_ARCH}
 
 #  wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Runtime/${DOTNET_VER}/dotnet-runtime-${DOTNET_VER}-linux-musl-${DOTNET_ARCH}.tar.gz \
+# https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/Current/latest.version
+# https://dotnetcli.azureedge.net/dotnet/Runtime/LTS/latest.version
+# https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/5.0.6/aspnetcore-runtime-5.0.6-linux-musl-x64.tar.gz
+
 
 COPY aspnetcore-runtime-${DOTNET_VER}-linux-musl-${DOTNET_ARCH}.tar.gz dotnet.tar.gz
 COPY DnsServerPortable.tar.gz DnsServerPortable.tar.gz
